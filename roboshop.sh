@@ -31,7 +31,7 @@ do
     {
         "Comment": "Creating a record set"
         ,"Changes": [{
-        "Action"              : "UPSERT"
+        "Action"              : "CREATE"
         ,"ResourceRecordSet"  : {
             "Name"              : "'$i'.'$DN'"
             ,"Type"             : "A"
