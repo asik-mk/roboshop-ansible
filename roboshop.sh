@@ -3,7 +3,7 @@ ID=$(id -u)
 INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "web")
 DN="mohammedasik.shop"
 
-if ( $ID -ne 0 )
+if [ $ID -ne 0 ]
 then
     echo " Switch to root user "
     exit 1;
