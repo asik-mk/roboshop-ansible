@@ -39,5 +39,5 @@ do
         }
         }]
     }
-    '
+    ' &>> /tmp/logfile.txt
 done
