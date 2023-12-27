@@ -13,13 +13,13 @@ fi
 
 for i in "${INSTANCES[@]}"
 do
-
+    echo "Instance is : $i"
     IPADDRESS=$(aws ec2 run-instances \
         --image-id ami-03265a0778a880afb \
         --instance-type t2.micro \
         --count 1 \
         --security-group-ids sg-0a7b5d6d0aaba9852 \
-        --tag-specifications "ResourceType=instance,Tags=[{Key=webserver,Value=$INSTANCES}]" \
+        --tag-specifications "ResourceType=instance,Tags=[{Key=webserver,Value=$i}]" \
         --query 'Instances[0].PrivateIpAddress' --output text)
 
     aws route53 change-resource-record-sets \
