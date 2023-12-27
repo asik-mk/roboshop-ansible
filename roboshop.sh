@@ -37,7 +37,7 @@ do
             ,"Type"             : "A"
             ,"TTL"              : 0
             ,"ResourceRecords"  : [{
-                "Value"         : "'$IPADDRESS'"
+                "Value"         : "'$IP_ADDRESS'"
             }]
         }
         }]
