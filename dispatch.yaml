@@ -44,6 +44,10 @@
     ansible.builtin.systemd_service:
       daemon_reload: true
 
+  - name: unmask dispatch service
+    ansible.builtin.shell: systemctl unmask dispatch.service
+
+
   - name: enable and start dispatch
     ansible.builtin.service:
       name: dispatch
