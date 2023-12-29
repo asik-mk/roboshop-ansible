@@ -24,7 +24,7 @@
   
   - name: Downloading a file from web
     ansible.builtin.get_url:
-      src: https://roboshop-builds.s3.amazonaws.com/user.zip
+      url: https://roboshop-builds.s3.amazonaws.com/user.zip
       dest: /tmp/user.zip
 
   - name: extracting the user data to /app directory
