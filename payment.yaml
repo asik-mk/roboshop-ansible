@@ -25,7 +25,7 @@
   
   - name: Downloading payment file from website
     ansible.builtin.get_url:
-      src: https://roboshop-builds.s3.amazonaws.com/payment.zip
+      url: https://roboshop-builds.s3.amazonaws.com/payment.zip
       dest: /tmp/payment.zip
 
   - name: unzipping 
