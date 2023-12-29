@@ -35,8 +35,8 @@
 
   - name: Installing dependencies
     ansible.builtin.shell: npm install
-     args:
-       chdir: /app
+    args:
+      chdir: /app
   
   - name: Daemon-reload
     ansible.builtin.systemd_service:
