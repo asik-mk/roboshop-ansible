@@ -35,6 +35,11 @@
     args:
       chdir: /app
 
+  - name: Copy cart service
+    ansible.builtin.copy:
+      src: cart.service
+      dest: /etc/systemd/system/cart.service
+
   - name: Daemon reload
     ansible.builtin.systemd_service:
       daemon_reload: yes
