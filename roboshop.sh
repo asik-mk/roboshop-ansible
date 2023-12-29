@@ -18,12 +18,12 @@ do
     IP_ADDRESS=$(aws ec2 run-instances --image-id ami-03265a0778a880afb --instance-type $INSTANCE_TYPE --security-group-ids sg-0a7b5d6d0aaba9852 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$i}]" --query 'Instances[0].PrivateIpAddress' --output text)
     echo "$i: $IP_ADDRESS"
 
-    #create R53 record, make sure you delete existing record
+    #create/update R53 record
     aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE_ID \
     --change-batch '
     {
-        "Comment": "Creating a record set for cognito endpoint"
+        "Comment": "Creating a record sets for roboshop servers"
         ,"Changes": [{
         "Action"              : "UPSERT"
         ,"ResourceRecordSet"  : {
