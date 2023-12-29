@@ -25,6 +25,12 @@
     ansible.builtin.unarchive:
       src: /tmp/web.zip
       dest: /usr/share/nginx/html
+      remote_src: yes
+
+  - name: Copy roboshop.conf service
+    ansible.builtin.copy:
+      src: roboshop.conf
+      dest: /etc/nginx/default.d/roboshop.conf
 
   - name:restarting nginx
     ansible.builtin.service:
