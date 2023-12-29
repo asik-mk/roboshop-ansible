@@ -1,0 +1,68 @@
+- name: user
+  hosts: user
+  become: yes
+  tasks:
+  - name: Disabling old version of node js
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
+
+  - name: Installing latest version of node Js
+    ansible.builtin.dnf:
+      name: nodejs
+      state: present
+
+  - name: Creating user roboshop
+    ansible.builtin.user:
+      name: roboshop
+
+  - name: Removing /app directory if already exists
+    ansible.builtin.shell: rm -rf /app
+
+  - name: Creating a directory
+    ansible.builtin.file:
+      path: /app
+      state: directory
+  
+  - name: Downloading a file from web
+    ansible.builtin.get_url:
+      src: https://roboshop-builds.s3.amazonaws.com/user.zip
+      dest: /tmp/user.zip
+
+  - name: extracting the user data to /app directory
+    ansible.builtin.unarchive:
+      src: /tmp/user.zip
+      dest: /app
+      remote_src: yes
+
+  - name: Installing dependencies
+    ansible.builtin.shell: npm install
+      args:
+        chdir: /app
+  
+  - name: Daemon-reload
+    ansible.builtin.systemd_service:
+      daemon_reload: true
+
+  - name: Enabling and starting user
+    ansible.builtin.service:
+      name: user.service
+      enabled: yes
+      state: started
+
+  - name: copying mongodb repo for installation
+    ansible.builtin.copy:
+      src: mongodb.repo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  - name: Installing mongo client
+    ansible.builtin.dnf:
+      name: mongodb-org-shell
+      state: present
+
+  - name: get the users count
+    ansible.builtin.command:  mongo --host mongodb.mohammedasik.shop --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+    register: user_count
+  
+  - name: load user data
+    ansible.builtin.command: mongo --host mongodb.mohammedasik.shop < /app/schema/user.js
+    when: user_count.stdout == "0" # keep double quotes
+  
