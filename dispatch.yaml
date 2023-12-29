@@ -50,6 +50,6 @@
 
   - name: enable and start dispatch
     ansible.builtin.service:
-      name: dispatch
+      name: dispatch.service
       state: started
       enabled: yes
