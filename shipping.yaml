@@ -14,10 +14,15 @@
   - name: removing /app if already exists
     ansible.builtin.shell: rm -rf /app
 
+  - name: Creating dir
+    ansible.builtin.file:
+      path: /app
+      state: directory
+
   - name: download shipping data from website
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/shipping.zip
-      dest: /tmp/shipping.zip
+      dest: /tmp
 
   - name: Unzipping
     ansible.builtin.unarchive:
