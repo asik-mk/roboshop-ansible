@@ -6,12 +6,6 @@
     ansible.builtin.dnf:
       name: nginx
       state: present
-
-  - name: Enabling and starting nginx
-    ansible.builtin.service:
-      name: nginx
-      enabled: yes
-      state: started
   
   - name: removing the data from html directory
     ansible.builtin.shell: rm -rf /usr/share/nginx/html/*
