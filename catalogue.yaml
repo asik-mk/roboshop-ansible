@@ -2,60 +2,62 @@
   hosts: catalogue
   become: yes
   tasks:
-  - name: Disabling Old version of nodeJS
+  - name: disable old nodejs and enable nodejs
     ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
-  
-  - name: Install Node JS latest
+
+  - name: Install nodejs
     ansible.builtin.dnf:
-      name: nodejs
+      name: nodejs 
       state: present
-  
-  - name: Adding user roboshop
+
+  - name: create roboshop user
     ansible.builtin.user:
       name: roboshop
-  
-  - name: remove /app dir if present already
+
+  - name: Recursively remove app directory
     ansible.builtin.file:
       path: /app
       state: absent
-  
-  - name: Creating the app directory
-    ansible.builtin.file:  
+
+  - name: create app directory
+    ansible.builtin.file:
       path: /app
       state: directory
 
-  - name: Download catalogue zip file
+  - name: download catalogue application
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
-      dest: /tmp/catalogue.zip
+      dest: /tmp
 
-  - name: Extract catalogue zip file to /app
+  - name: extract catalogue application
     ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
       remote_src: yes
 
-  - name: Installing dependencies
-    ansible.builtin.shell: npm install
+  - name: Install dependencies
+    ansible.builtin.command: npm install
     args:
       chdir: /app
 
-  - name: Copying catalogue service 
+  - name: Copy catalogue service
     ansible.builtin.copy:
       src: catalogue.service
       dest: /etc/systemd/system/catalogue.service
 
-  - name: Daemon reload
+  - name: deamon realod and start
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-  - name: Copying mongo repo 
+  # let's start after the data is loaded
+
+  - name: Copy mongodb repo
     ansible.builtin.copy:
       src: mongodb.repo
-      dest: /etc/yum.repos.d/mongo.repo
+      dest: /etc/yum.repos.d/mongodb.repo
 
   - name: Install mongodb client
-    ansible.builtin.dnf:
+    ansible.builtin.package:
       name: mongodb-org-shell
       state: present
 
@@ -64,8 +66,8 @@
     register: product_count
 
   # - name: print the count
-#   ansible.builtin.debug:
-#     msg: "product count: {{product_count}}"
+  #   ansible.builtin.debug:
+  #     msg: "product count: {{product_count}}"
 
   - name: load catalogue data
     ansible.builtin.command: mongo --host mongodb.mohammedasik.shop < /app/schema/catalogue.js
