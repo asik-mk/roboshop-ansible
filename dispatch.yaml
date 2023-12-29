@@ -49,7 +49,4 @@
 
 
   - name: enable and start dispatch
-    ansible.builtin.service:
-      name: dispatch.service
-      state: started
-      enabled: yes
+    ansible.builtin.shell: systemctl enable dispatch ; systemctl start dispatch 
