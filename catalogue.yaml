@@ -1,7 +1,7 @@
 - name: catalogue
   hosts: catalogue
   become: yes
-  tasks
+  tasks:
   - name: Disabling Old version of nodeJS
     ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
   
