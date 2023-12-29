@@ -37,6 +37,11 @@
     ansible.builtin.shell: npm install
     args:
       chdir: /app
+
+  - name: Copy user service
+    ansible.builtin.copy:
+      src: user.service
+      dest: /etc/systemd/system/user.service
   
   - name: Daemon-reload
     ansible.builtin.systemd_service:
@@ -53,7 +58,7 @@
       state: present
 
   - name: get the users count
-    ansible.builtin.command:  mongo --host mongodb.mohammedasik.shop --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+    ansible.builtin.command:  mongo --host mongodb.mohammedasik.shop --quiet --eval 'db = db.getSiblingDB("user"); db.users.count()'
     register: user_count
   
   - name: load user data
