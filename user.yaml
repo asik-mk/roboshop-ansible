@@ -42,12 +42,6 @@
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-  - name: Enabling and starting user
-    ansible.builtin.service:
-      name: user
-      enabled: yes
-      state: started
-
   - name: copying mongodb repo for installation
     ansible.builtin.copy:
       src: mongodb.repo
@@ -66,3 +60,8 @@
     ansible.builtin.command: mongo --host mongodb.mohammedasik.shop < /app/schema/user.js
     when: user_count.stdout == "0" # keep double quotes
   
+  - name: Enabling and starting user
+    ansible.builtin.service:
+      name: user
+      state: restarted
+      enabled: yes
